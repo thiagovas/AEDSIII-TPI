@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include "graph.h"
 #include "pair.h"
+#include "queue.h"
+
+#define MAX 2147000000
 
 void Bfs(graph *grafo, int start);
 void Dijkstra(graph *grafo, int start, int end);
@@ -24,13 +27,13 @@ int main()
 	{
 		scanf("%d %d %d %d", &q, &r, &d, &k);
 		InitEmptyVector(&delegacias);
-		InitGraph(&grafo, q);
+		InitGraph(&grafo, q, MAX);
 		
 		while(r-- > 0)
 		{
 			scanf("%d %d %lf", &from, &to, &cost);
-			AddEdge(&grafo, from, to, cost);
-			AddEdge(&grafo, to, from, cost);
+			AddEdge(&grafo, from-1, to-1, cost);
+			AddEdge(&grafo, to-1, from-1, cost);
 		}
 		
 		while(d-- > 0)
@@ -39,14 +42,14 @@ int main()
 			Push_back(&delegacias, input);
 		}
 		
-		for(i = 0; i < SizeVector(delegacias); i++)
-			Bfs(&grafo, At(&delegacias, i));
+		//for(i = 0; i < SizeVector(delegacias); i++)
+		//	Bfs(&grafo, At(&delegacias, i));
 		
 		scanf("%d", &n);
 		while(n-- > 0)
 		{
 			scanf("%d %d", &from, &to);
-			Dijkstra(&grafo, from, to);
+			//Dijkstra(&grafo, from, to);
 		}
 		ClearGraph(&grafo);
 		ClearVector(&delegacias);
@@ -58,32 +61,35 @@ int main()
 void Bfs(graph *grafo, int start)
 {
 	queue nodes;
-	int atual;
+	int_pair atual;
+	int i, node;
 	vector visited;
 	
+	InitQueue(&nodes);
 	InitVector(&visited, SizeGraph(*grafo), 0); //Inicializo visited com n posições e todas com 0.
 	
-	
-	
-	/*
-	queue<int> nodes;
-	int atual;
-	vector<bool> visited(grafo->size(), false);
-	
-	while(!nodes.empty())
+	PushQueue(&nodes, make_intpair(start, 0));
+	while(EmptyQueue(nodes) == 0)
 	{
-		atual = nodes.front();
-		nodes.pop();
-		if(visited[atual]) continue;
+		atual = FrontQueue(nodes);
+		PopQueue(&nodes);
+		//Se ja visitei esse node eu so pulo para o proximo node da queue;
+		if(At(&visited, atual.first) == 1) continue;
 		
-		for(vector<int>::iterator it = (*grafo)[atual].begin(); it != (*grafo)[atual].end(); it++)
-			if(!visited[*it]) nodes.push(*it);
+		if(atual.second < NodeValue(grafo, atual.first))
+			EditNodeValue(grafo, atual.first, atual.second);
+		
+		for(i = 0; i < NumAdjacents(grafo, atual.first); i++)
+		{
+			node = AdjacentNode(grafo, atual.first, i);
+			if(At(&visited, node) == 0) PushQueue(&nodes, make_intpair(node, atual.second+1));
+		}
 	}
-	*/
 }
 
 void Dijkstra(graph *grafo, int start, int end)
 {
+	/*
     heap q;
     intDouble_pair atual;
     int *pesos = (int*)calloc(grafo->size(), sizeof(int));
@@ -117,4 +123,5 @@ void Dijkstra(graph *grafo, int start, int end)
     }
     free(pesos);
     return retorno;
+    */
 }

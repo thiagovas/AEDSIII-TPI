@@ -29,11 +29,11 @@ typedef struct{
 		Empty
 */
 
-void InitHeap(heap *obj, );
-void Clear(heap *obj);
-void Push(heap *obj, int value);
-int Front(heap *obj);
-void Pop(heap *obj);
+void InitHeap(heap *obj, int (*func)(const intDouble_pair, const intDouble_pair));
+void ClearHeap(heap *obj);
+void PushHeap(heap *obj, intDouble_pair value);
+int FrontHeap(heap *obj);
+void PopHeap(heap *obj);
 int SizeHeap(heap *obj);
-int Empty(heap *obj);
+int EmptyHeap(heap *obj);
 #endif

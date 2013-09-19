@@ -27,10 +27,12 @@ typedef struct{
 	int numberNodes; //Number of nodes
 } graph;
 
-void InitGraph(graph *g, int nNodes);
+void InitGraph(graph *g, int nNodes, int defaultValue);
 void AddEdge(graph *g, int FromNode, int ToNode, double cost);
-void RemoveEdge(graph *g, int FromNode, int ToNode);
 void ClearGraph(graph *g);
 int SizeGraph(graph g);
+int NumAdjacents(graph *g, int node);
+int NodeValue(graph *g, int node);
+void EditNodeValue(graph *g, int node, int newValue);
 
 #endif

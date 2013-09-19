@@ -6,6 +6,8 @@
 
 /* http://pt.wikipedia.org/wiki/Heap */
 
+/* TODO: Acabar de implementar a heap */
+
 void InitHeap(heap *obj, int (*func)(const intDouble_pair, const intDouble_pair))
 {
 	obj->size = 0;
@@ -29,7 +31,8 @@ void Push(heap *obj, intDouble_pair value)
 
 intDouble_pair Front(heap *obj)
 {
-	if(obj == NULL || obj->values == NULL) return NULL;
+	/* TODO: Pensar em como retornar esse erro. */
+	if(obj == NULL || obj->values == NULL) return;
 	
 	return obj->values[0];
 }

@@ -34,7 +34,7 @@ void InitEmptyVector(vector *obj)
 void Push_back(vector *obj, int value)
 {
 	obj->list = (item*)realloc(obj->list, (obj->sizeObj + 1)*sizeof(item));
-	obj->list[obj->sizeObj] = value;
+	obj->list[obj->sizeObj].value = value;
 	obj->sizeObj += 1;
 }
 
@@ -45,7 +45,7 @@ void Push_front(vector *obj, int value)
 	
 	for(i = obj->sizeObj; i > 0; i++)
 		obj->list[i] = obj->list[i-1];
-	obj->list[0] = value;
+	obj->list[0].value = value;
 	
 	obj->sizeObj += 1;
 }
@@ -58,13 +58,13 @@ void Pop_back(vector *obj)
 
 void PrintVector(vector obj)
 {
-	if(obj->sizeObj == 0) return;
+	if(obj.sizeObj == 0) return;
 	
 	int i = 1;
 	
-	printf("%d", obj->list[0]);
-	for(i = 1; i < obj->sizeObj; i++)
-		printf(" %d", obj->list[i]);
+	printf("%d", obj.list[0].value);
+	for(i = 1; i < obj.sizeObj; i++)
+		printf(" %d", obj.list[i].value);
 	printf("\n");
 }
 

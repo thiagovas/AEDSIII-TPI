@@ -3,10 +3,10 @@ CC=gcc
 
 all: build clearafter
 
-build: main.o graph.o vector.o heap.o pair.o
-	$(CC) main.o graph.o vector.o heap.o pair.o -o tp1
+build: main.o graph.o vector.o heap.o pair.o queue.o
+	$(CC) main.o graph.o vector.o heap.o pair.o queue.o -o tp1
 
-main.o: graph.h pair.h
+main.o: graph.h pair.h queue.o
 	$(CC) -c main.c -o main.o
 
 graph.o: vector.h
@@ -20,6 +20,9 @@ heap.o: pair.h
 
 pair.o:
 	$(CC) -c pair.c -o pair.o
+
+queue.o: pair.h vector.h
+	$(CC) -c queue.c -o queue.o
 
 #Clear temporary files after compiling
 clearafter:
