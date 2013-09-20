@@ -8,7 +8,7 @@
 #include "pair.h"
 #include "queue.h"
 
-#define MAX 2147000000
+#define INF 2147000000
 
 void Bfs(graph *grafo, int start);
 void Dijkstra(graph *grafo, int start, int end);
@@ -27,7 +27,7 @@ int main()
 	{
 		scanf("%d %d %d %d", &q, &r, &d, &k);
 		InitEmptyVector(&delegacias);
-		InitGraph(&grafo, q, MAX);
+		InitGraph(&grafo, q, INF);
 		
 		while(r-- > 0)
 		{
@@ -43,7 +43,7 @@ int main()
 		}
 		
 		//for(i = 0; i < SizeVector(delegacias); i++)
-		//	Bfs(&grafo, At(&delegacias, i));
+			//Bfs(&grafo, At(&delegacias, i));
 		
 		scanf("%d", &n);
 		while(n-- > 0)

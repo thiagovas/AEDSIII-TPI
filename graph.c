@@ -10,18 +10,31 @@ void InitGraph(graph *g, int nNodes, int defaultValue)
 	{
 		g->nodes[i].value = defaultValue;
 		g->nodes[i].edges = NULL;
+		g->nodes[i].numAdjacents = 0;
 	}
 }
 
 void AddEdge(graph *g, int FromNode, int ToNode, double cost)
 {
 	int tam = 0;
-	g->nodes[FromNode].edges = (edge*)realloc(g->nodes[FromNode].edges, sizeof(g->nodes[FromNode].edges) + sizeof(edge));
+	size_t newtam = sizeof(g->nodes[FromNode].edges) + sizeof(edge);
+	
+ 	edge *tempPtr = (edge*)realloc(g->nodes[FromNode].edges, newtam);
+ 	
+ 	if(tempPtr == NULL)
+ 	{
+ 		// TODO: Printar uma msg de erro.
+ 		printf("OH\n");
+ 		free(g->nodes[FromNode].edges);
+ 	}
+ 	g->nodes[FromNode].edges = tempPtr;
+ 	
 	tam = NumAdjacents(g, FromNode);
-	g->nodes[FromNode].edges[tam-1].value = -1;
-	g->nodes[FromNode].edges[tam-1].from = FromNode;
-	g->nodes[FromNode].edges[tam-1].to = ToNode;
-	g->nodes[FromNode].edges[tam-1].cost = cost;
+	g->nodes[FromNode].edges[tam].value = -1;
+	g->nodes[FromNode].edges[tam].from = FromNode;
+	g->nodes[FromNode].edges[tam].to = ToNode;
+	g->nodes[FromNode].edges[tam].cost = cost;
+	g->nodes[FromNode].numAdjacents += 1;
 }
 
 void ClearGraph(graph *g)
@@ -34,9 +47,7 @@ void ClearGraph(graph *g)
 	}
 	free(g->nodes);
 	g->nodes = NULL;
-	free(g);
 	g->numberNodes= 0;
-	g = NULL;
 }
 
 int SizeGraph(graph g)
@@ -53,7 +64,7 @@ int AdjacentNode(graph g, int FromNode, int index)
 
 int NumAdjacents(graph *g, int node)
 {
-	return sizeof(g->nodes[node].edges) / sizeof(g->nodes[node].edges[0]);
+	return g->nodes[node].numAdjacents;
 }
 
 int NodeValue(graph *g, int node)

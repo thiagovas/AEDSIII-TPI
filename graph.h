@@ -19,7 +19,7 @@ typedef struct{
 
 typedef struct{
 	edge *edges;
-	int value;
+	int value, numAdjacents;
 } node;
 
 typedef struct{

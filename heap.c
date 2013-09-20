@@ -25,21 +25,30 @@ void Clear(heap *obj)
 
 void Heapify(heap *obj, int index)
 {
-	int l = obj->values[Left(index)], r = obj->values[Right(index)];
+	int l = Left(index), r = Right(index);
 	int largest;
+	intDouble_pair temp;
 	
 	if(l < SizeHeap(obj) && obj->func(obj->values[l], obj->values[index]))
 		largest = l;
 	else
-		largest = i;
+		largest = index;
 	
 	if(r < SizeHeap(obj) && obj->func(obj->values[r], obj->values[largest]))
 		largest = r;
+	
+	if(largest != index)
+	{
+		temp = obj->values[largest];
+		obj->values[largest] = obj->values[index];
+		obj->values[index] = temp;
+		Heapify(obj, Father(index));
+	}
 }
 
 void Push(heap *obj, intDouble_pair value)
 {
-	obj->values = (intDouble_pair*) realloc(sizeof(intDouble_pair));
+	obj->values = (intDouble_pair*) realloc(obj->values, (SizeHeap(obj)+1)*sizeof(intDouble_pair));
 	obj->size += 1;
 }
 
