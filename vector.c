@@ -83,3 +83,8 @@ int At(vector *obj, int index)
 {
 	return obj->list[index].value;
 }
+
+void EditItem(vector *obj, int index, int newValue)
+{
+	obj->list[index].value = newValue;
+}

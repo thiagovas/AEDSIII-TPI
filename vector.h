@@ -40,5 +40,6 @@ void Find(vector *obj, int value);
 int SizeVector(vector obj);
 void ClearVector(vector *obj);
 int At(vector *obj, int index);
+void EditItem(vector *obj, int index, int newValue);
 
 #endif

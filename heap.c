@@ -15,7 +15,7 @@ void InitHeap(heap *obj, int (*func)(const intDouble_pair, const intDouble_pair)
 	obj->func = func;
 }
 
-void Clear(heap *obj)
+void ClearHeap(heap *obj)
 {
 	if(obj->values == NULL) return;
 	
@@ -42,17 +42,38 @@ void Heapify(heap *obj, int index)
 		temp = obj->values[largest];
 		obj->values[largest] = obj->values[index];
 		obj->values[index] = temp;
-		Heapify(obj, Father(index));
+		
+		Heapify(obj, largest);
 	}
 }
 
-void Push(heap *obj, intDouble_pair value)
+void PushHeap(heap *obj, intDouble_pair value)
 {
-	obj->values = (intDouble_pair*) realloc(obj->values, (SizeHeap(obj)+1)*sizeof(intDouble_pair));
+	int index = SizeHeap(obj);
+	intDouble_pair *temp = (intDouble_pair*) realloc(obj->values, (SizeHeap(obj)+1)*sizeof(intDouble_pair));
+	intDouble_pair swap;
+	
+	if(temp == NULL)
+	{
+		// TODO: Pensat em uma mensagem de erro.
+		// Se temp for null, quer dizer que a alocação de memória não foi feita com sucesso.
+		free(obj->values);
+	}
+	
+	obj->values = temp;
+	obj->values[obj->size] = value;
 	obj->size += 1;
+	
+	while(index > 0 && obj->func(obj->values[Father(index)], obj->values[index]))
+	{
+		swap = obj->values[Father(index)];
+		obj->values[Father(index)] = obj->values[index];
+		obj->values[index] = swap;
+		index = Father(index);
+	}
 }
 
-intDouble_pair Front(heap *obj)
+intDouble_pair FrontHeap(heap *obj)
 {
 	/* TODO: Pensar em como retornar esse erro. */
 	if(obj == NULL || obj->values == NULL) return;
@@ -60,17 +81,28 @@ intDouble_pair Front(heap *obj)
 	return obj->values[0];
 }
 
-void Pop(heap *obj)
+void PopHeap(heap *obj)
 {
+	intDouble_pair *temp = NULL;
+	obj->values[0] = obj->values[SizeHeap(obj)-1];
 	
+	obj->size -= 1;
+	temp = realloc(obj->values, SizeHeap(obj)*sizeof(intDouble_pair));
+	
+	if(temp == NULL)
+	{
+		// TODO: Pensar em uma maneira de printar o erro;
+		free(obj->values);
+	}
+	obj->values = temp;
+	
+	Heapify(obj, 0);
 }
 
 int SizeHeap(heap *obj)
-{
-	return obj->size;
-}
+{ return obj->size; }
 
-int Empty(heap *obj)
+int EmptyHeap(heap *obj)
 {
 	return obj->size == 0;
 }

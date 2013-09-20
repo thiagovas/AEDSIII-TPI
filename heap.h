@@ -19,20 +19,10 @@ typedef struct{
 	int (*func)(const intDouble_pair, const intDouble_pair); // Função usada para montar a heap. Nesse tp vou usar só um min ou max.
 } heap;
 
-/*
-	TODO:
-		Init
-		Clear
-		Push
-		Pop
-		Size
-		Empty
-*/
-
 void InitHeap(heap *obj, int (*func)(const intDouble_pair, const intDouble_pair));
 void ClearHeap(heap *obj);
 void PushHeap(heap *obj, intDouble_pair value);
-int FrontHeap(heap *obj);
+intDouble_pair FrontHeap(heap *obj);
 void Heapify(heap *obj, int index);
 void PopHeap(heap *obj);
 int SizeHeap(heap *obj);

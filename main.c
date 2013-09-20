@@ -7,11 +7,13 @@
 #include "graph.h"
 #include "pair.h"
 #include "queue.h"
+#include "heap.h"
 
 #define INF 2147000000
 
 void Bfs(graph *grafo, int start);
 void Dijkstra(graph *grafo, int start, int end);
+int comp(const intDouble_pair a, const intDouble_pair b);
 
 int main()
 {
@@ -45,13 +47,11 @@ int main()
 		for(i = 0; i < SizeVector(delegacias); i++)
 			Bfs(&grafo, At(&delegacias, i));
 		
-		//PrintVector(delegacias);
-		
 		scanf("%d", &n);
 		while(n-- > 0)
 		{
 			scanf("%d %d", &from, &to);
-			//Dijkstra(&grafo, from, to);
+			Dijkstra(&grafo, from, to);
 		}
 		ClearGraph(&grafo);
 		ClearVector(&delegacias);
@@ -81,6 +81,7 @@ void Bfs(graph *grafo, int start)
 		if(atual.second < NodeValue(grafo, atual.first))
 			EditNodeValue(grafo, atual.first, atual.second);
 		
+		EditItem(&visited, atual.first, 1);
 		for(i = 0; i < NumAdjacents(grafo, atual.first); i++)
 		{
 			node = AdjacentNode(grafo, atual.first, i);
@@ -91,39 +92,62 @@ void Bfs(graph *grafo, int start)
 
 void Dijkstra(graph *grafo, int start, int end)
 {
-	/*
-    heap q;
+	heap q;
     intDouble_pair atual;
-    int *pesos = (int*)calloc(grafo->size(), sizeof(int));
-    int retorno = -1, soma = 0;
+    int *pesos = (int*)alloc(SizeGraph(*grafo), sizeof(int));
+    int retorno = -1, soma = 0, node;
+    unsigned int i = 0;
     
-    for(unsigned int i = 0; i < grafo->size(); i++)
-        pesos[i] = -1;
+    for(i = 0; i < SizeGraph(*grafo); i++)
+        pesos[i] = INF;
     pesos[start] = 0;
     
-    Push(&q, make_pair(0, start));
+    InitHeap(&q, comp);
+    PushHeap(&q, make_intDoublePair(start, 0.0));
     
-    while(!q.empty())
+    while(EmptyHeap(&q) == 0)
     {
-        atual = q.top();
-        q.pop();
-        
-        if(atual.second == end)
-        {
-            retorno = pesos[atual.second];
-            break;
-        }
-        soma = pesos[atual.second];
-        
-        for(vector<pair<int, int> >::iterator i = (*grafo)[atual.second].begin(); i != (*grafo)[atual.second].end(); i++)
-        {
-            if(pesos[i->second] == -1) q.push(make_pair(soma+(i->first), i->second));
-            
-            if(((pesos[i->second] > soma+(i->first)) && (pesos[i->second] != 0)) || pesos[i->second] == -1)
-                pesos[i->second] = soma+(i->first);
-        }
+    	atual = FrontHeap(&q);
+    	PopHeap(&q);
+    	
+    	if(atual.first == end)
+    	{
+    		retorno = pesos[atual.first];
+    		break;
+    	}
+    	
+		for(i = 0; i < NumAdjacents(grafo, atual.first); i++)
+		{
+			node = AdjacentNode(grafo, atual.first, i);
+			
+		}
     }
+    
     free(pesos);
-    return retorno;
+    pesos = NULL;
+    /*
+    while(!pq.empty())
+	{
+		atual = *pq.begin();
+		pq.erase(pq.begin());
+		
+		if(atual.second == end) break;
+		
+		for(vector<PII >::iterator it = (*grafo)[atual.second].begin(); it != (*grafo)[atual.second].end(); it++)
+			if(pesos[it->second] > it->first+pesos[atual.second])
+			{
+				pesos[it->second] = it->first+pesos[atual.second];
+				pq.insert(make_pair(pesos[it->second], it->second));
+			}
+	}
+	
+	if(pesos[end] != INF)
+		return pesos[end];
+	else return -1;
     */
+}
+
+int comp(const intDouble_pair a, const intDouble_pair b)
+{
+	return 0;
 }
