@@ -31,6 +31,7 @@ void InitGraph(graph *g, int nNodes, int defaultValue);
 void AddEdge(graph *g, int FromNode, int ToNode, double cost);
 void ClearGraph(graph *g);
 int SizeGraph(graph g);
+int AdjacentNode(graph *g, int FromNode, int index);
 int NumAdjacents(graph *g, int node);
 int NodeValue(graph *g, int node);
 void EditNodeValue(graph *g, int node, int newValue);

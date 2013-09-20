@@ -42,8 +42,10 @@ int main()
 			Push_back(&delegacias, input);
 		}
 		
-		//for(i = 0; i < SizeVector(delegacias); i++)
-			//Bfs(&grafo, At(&delegacias, i));
+		for(i = 0; i < SizeVector(delegacias); i++)
+			Bfs(&grafo, At(&delegacias, i));
+		
+		//PrintVector(delegacias);
 		
 		scanf("%d", &n);
 		while(n-- > 0)

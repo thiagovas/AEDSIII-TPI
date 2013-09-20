@@ -6,7 +6,7 @@
 
 void InitQueue(queue *nodes)
 {
-	nodes = NULL;
+	nodes->begin = NULL;
 }
 
 void PushQueue(queue *nodes, int_pair newValue)
@@ -31,6 +31,8 @@ int_pair FrontQueue(queue nodes)
 
 void PopQueue(queue *nodes)
 {
+	if(nodes == NULL || nodes->begin == NULL) return;
+	
 	item_queue *oldItem = nodes->begin;
 	nodes->begin = nodes->begin->next;
 	free(oldItem);

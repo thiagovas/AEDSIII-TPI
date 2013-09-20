@@ -16,8 +16,8 @@ void InitGraph(graph *g, int nNodes, int defaultValue)
 
 void AddEdge(graph *g, int FromNode, int ToNode, double cost)
 {
-	int tam = 0;
-	size_t newtam = sizeof(g->nodes[FromNode].edges) + sizeof(edge);
+	int tam = NumAdjacents(g, FromNode);
+	size_t newtam = (tam+1)*sizeof(edge);
 	
  	edge *tempPtr = (edge*)realloc(g->nodes[FromNode].edges, newtam);
  	
@@ -29,7 +29,6 @@ void AddEdge(graph *g, int FromNode, int ToNode, double cost)
  	}
  	g->nodes[FromNode].edges = tempPtr;
  	
-	tam = NumAdjacents(g, FromNode);
 	g->nodes[FromNode].edges[tam].value = -1;
 	g->nodes[FromNode].edges[tam].from = FromNode;
 	g->nodes[FromNode].edges[tam].to = ToNode;
@@ -44,6 +43,7 @@ void ClearGraph(graph *g)
 	{
 		free(g->nodes[i].edges);
 		g->nodes[i].edges = NULL;
+		g->nodes[i].numAdjacents = 0;
 	}
 	free(g->nodes);
 	g->nodes = NULL;
@@ -53,13 +53,13 @@ void ClearGraph(graph *g)
 int SizeGraph(graph g)
 { return g.numberNodes; }
 
-int AdjacentNode(graph g, int FromNode, int index)
+int AdjacentNode(graph *g, int FromNode, int index)
 {
 	if(FromNode < 0) return -1;
-	if(g.nodes == NULL || g.nodes[FromNode].edges == NULL) return -1;
-	if(index < 0 || index >= NumAdjacents(&g, FromNode)) return -1;
+	if(g->nodes == NULL || g->nodes[FromNode].edges == NULL) return -1;
+	if(index < 0 || index >= NumAdjacents(g, FromNode)) return -1;
 	
-	return g.nodes[FromNode].edges[index].to;
+	return g->nodes[FromNode].edges[index].to;
 }
 
 int NumAdjacents(graph *g, int node)
