@@ -24,7 +24,6 @@ void AddEdge(graph *g, int FromNode, int ToNode, double cost)
  	if(tempPtr == NULL)
  	{
  		// TODO: Printar uma msg de erro.
- 		printf("OH\n");
  		free(g->nodes[FromNode].edges);
  	}
  	g->nodes[FromNode].edges = tempPtr;
@@ -53,13 +52,44 @@ void ClearGraph(graph *g)
 int SizeGraph(graph g)
 { return g.numberNodes; }
 
+int ValueFromNode(graph *g, int node)
+{
+	if(g->nodes == NULL) return -1;
+	
+	return g->nodes[node].value;
+}
+
+edge* GetEdge(graph *g, int FromNode, int index)
+{
+	if(FromNode < 0) return NULL;
+	if(g->nodes == NULL || g->nodes[FromNode].edges == NULL) return NULL;
+	if(index < 0 || index >= NumAdjacents(g, FromNode)) return NULL;
+	
+	return &(g->nodes[FromNode].edges[index]);
+}
+
+double CostFromEdge(graph *g, int FromNode, int index)
+{
+	edge *retEdge = GetEdge(g, FromNode, index);
+	
+	if(retEdge == NULL) return -1;
+	else return retEdge->cost;
+}
+
+int ValueFromEdge(graph *g, int FromNode, int index)
+{
+	edge *retEdge = GetEdge(g, FromNode, index);
+	
+	if(retEdge == NULL) return -1;
+	else return retEdge->value;
+}
+
 int AdjacentNode(graph *g, int FromNode, int index)
 {
-	if(FromNode < 0) return -1;
-	if(g->nodes == NULL || g->nodes[FromNode].edges == NULL) return -1;
-	if(index < 0 || index >= NumAdjacents(g, FromNode)) return -1;
+	edge *retEdge = GetEdge(g, FromNode, index);
 	
-	return g->nodes[FromNode].edges[index].to;
+	if(retEdge == NULL) return -1;
+	else return retEdge->to;
 }
 
 int NumAdjacents(graph *g, int node)

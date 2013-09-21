@@ -75,27 +75,14 @@ void PushHeap(heap *obj, intDouble_pair value)
 
 intDouble_pair FrontHeap(heap *obj)
 {
-	/* TODO: Pensar em como retornar esse erro. */
-	if(obj == NULL || obj->values == NULL) return;
-	
 	return obj->values[0];
 }
 
 void PopHeap(heap *obj)
 {
-	intDouble_pair *temp = NULL;
 	obj->values[0] = obj->values[SizeHeap(obj)-1];
-	
 	obj->size -= 1;
-	temp = realloc(obj->values, SizeHeap(obj)*sizeof(intDouble_pair));
-	
-	if(temp == NULL)
-	{
-		// TODO: Pensar em uma maneira de printar o erro;
-		free(obj->values);
-	}
-	obj->values = temp;
-	
+	obj->values = realloc(obj->values, SizeHeap(obj)*sizeof(intDouble_pair));
 	Heapify(obj, 0);
 }
 

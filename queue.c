@@ -26,7 +26,7 @@ int EmptyQueue(queue nodes)
 int_pair FrontQueue(queue nodes)
 {
 	/* TODO: Pensar em uma maneira de retornar esse erro */
-	if(nodes.begin->next == NULL) return;
+	if(nodes.begin->next == NULL) return make_intpair(-1, -1);
 	return nodes.begin->next->value;
 }
 
