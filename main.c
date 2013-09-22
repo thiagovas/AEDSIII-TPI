@@ -103,13 +103,15 @@ void Dijkstra(graph *grafo, int start, int end, int k)
 {
 	heap q;
     intDouble_pair atual;
-    double *pesos = (double*)alloc(SizeGraph(*grafo), sizeof(int)), prob;
+    double *pesos = (double*)alloc(SizeGraph(*grafo), sizeof(double)), prob;
     int *antecedentes = (int*)alloc(SizeGraph(*grafo), sizeof(int));
-    int encontrou = 0, node, index;
-    unsigned int i = 0;
+    int encontrou = 0, node, i = 0;
     
     for(i = 0; i < SizeGraph(*grafo); i++)
-        pesos[i] = antecedentes[i] = INF;
+    {
+        pesos[i] = INF;
+        antecedentes[i] = INF;
+    }
     pesos[start] = 0;
     
     InitHeap(&q, comp);
@@ -133,7 +135,7 @@ void Dijkstra(graph *grafo, int start, int end, int k)
 		{
 			node = AdjacentNode(grafo, atual.first, i);
 			prob = 1.0-(1.0-CostFromEdge(grafo, atual.first, i))*(1.0-pesos[atual.first]);
-			//printf("%d %lf %lf %lf %lf\n", node+1, CostFromEdge(grafo, atual.first, i), prob, 1-prob, pesos[node]);
+			//printf("Atual: %d   Node: %d   Cost: %lf   Prob: %lf   Peso[node]: %lf\n", atual.first+1, node+1, CostFromEdge(grafo, atual.first, i), prob, pesos[node]);
 			if(prob < pesos[node])
 			{
 				pesos[node] = prob;
@@ -145,18 +147,18 @@ void Dijkstra(graph *grafo, int start, int end, int k)
     
     if(encontrou)
     {
-    	PrintPath(antecedentes, start, end);
     	printf("%.2lf", pesos[end]);
+    	PrintPath(antecedentes, start, end);
     	printf(" %d", end+1);
     }
     else
     {
     	printf("-1");
     }
-    //free(pesos);
-    //free(antecedentes);
-    //antecedentes = NULL;
-    //pesos = NULL;
+    free(pesos);
+    free(antecedentes);
+    antecedentes = NULL;
+    pesos = NULL;
 }
 
 int comp(const intDouble_pair a, const intDouble_pair b)
