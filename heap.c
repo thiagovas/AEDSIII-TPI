@@ -55,7 +55,7 @@ void PushHeap(heap *obj, intDouble_pair value)
 	
 	if(temp == NULL)
 	{
-		// TODO: Pensat em uma mensagem de erro.
+		// TODO: Pensar em uma mensagem de erro.
 		// Se temp for null, quer dizer que a alocação de memória não foi feita com sucesso.
 		free(obj->values);
 	}
@@ -64,7 +64,8 @@ void PushHeap(heap *obj, intDouble_pair value)
 	obj->values[obj->size] = value;
 	obj->size += 1;
 	
-	while(index > 0 && obj->func(obj->values[Father(index)], obj->values[index]))
+	// TODO: Verificar se eu uso a função func corretamente aqui.
+	while(index > 0 && !obj->func(obj->values[Father(index)], obj->values[index]))
 	{
 		swap = obj->values[Father(index)];
 		obj->values[Father(index)] = obj->values[index];

@@ -12,10 +12,23 @@ void InitQueue(queue *nodes)
 
 void PushQueue(queue *nodes, int_pair newValue)
 {
+	/*
 	item_queue *newItem = (item_queue*)alloc(1, sizeof(item_queue));
 	nodes->begin->value = newValue;
 	newItem->next = nodes->begin;
 	nodes->begin = newItem;
+	*/
+	
+	item_queue *newItem = (item_queue*)alloc(1, sizeof(item_queue));
+	item_queue *temp = nodes->begin;
+	
+	while(temp->next != NULL)
+		temp = temp->next;
+	
+	newItem->value = newValue;
+	newItem->next = NULL;
+	
+	temp->next = newItem;
 }
 
 int EmptyQueue(queue nodes)

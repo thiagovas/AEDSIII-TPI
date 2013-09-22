@@ -14,6 +14,7 @@
 void Bfs(graph *grafo, int start);
 void Dijkstra(graph *grafo, int start, int end, int k);
 int comp(const intDouble_pair a, const intDouble_pair b);
+void PrintPath(int *parents, int start, int end);
 
 int main()
 {
@@ -41,17 +42,16 @@ int main()
 		while(d-- > 0)
 		{
 			scanf("%d", &input);
-			Push_back(&delegacias, input);
+			Push_back(&delegacias, input-1);
 		}
 		
 		for(i = 0; i < SizeVector(delegacias); i++)
 			Bfs(&grafo, At(&delegacias, i));
 		
-		for(i = 0; i < NumAdjacents(grafo, atual.first); i++)
-		{
-			node = AdjacentNode(grafo, atual.first, i);
-			
-		}
+		/*
+		for(i = 0; i < SizeGraph(grafo); i++)
+			printf("%d: %d\n", i+1, grafo.nodes[i].value);
+		*/
 		
 		scanf("%d", &n);
 		while(n-- > 0)
@@ -59,6 +59,7 @@ int main()
 			scanf("%d %d", &from, &to);
 			from--; to--;
 			Dijkstra(&grafo, from, to, k);
+			printf("\n");
 		}
 		printf("\n");
 		ClearGraph(&grafo);
@@ -102,9 +103,9 @@ void Dijkstra(graph *grafo, int start, int end, int k)
 {
 	heap q;
     intDouble_pair atual;
-    double *pesos = (double*)alloc(SizeGraph(*grafo), sizeof(int));
+    double *pesos = (double*)alloc(SizeGraph(*grafo), sizeof(int)), prob;
     int *antecedentes = (int*)alloc(SizeGraph(*grafo), sizeof(int));
-    int encontrou = 0, node;
+    int encontrou = 0, node, index;
     unsigned int i = 0;
     
     for(i = 0; i < SizeGraph(*grafo); i++)
@@ -119,58 +120,43 @@ void Dijkstra(graph *grafo, int start, int end, int k)
     	atual = FrontHeap(&q);
     	PopHeap(&q);
     	
+    	if(ValueFromNode(grafo, atual.first) > k) continue;
+    	
+    	//printf("%d\n", atual.first+1);
     	if(atual.first == end)
     	{
     		encontrou = 1;
     		break;
     	}
     	
-    	if(ValueFromNode(grafo, atual.first) > k) continue;
-    	
 		for(i = 0; i < NumAdjacents(grafo, atual.first); i++)
 		{
 			node = AdjacentNode(grafo, atual.first, i);
-			if(pesos[node] > 1.0-(1.0-CostFromEdge(grafo, atual.first, i))*(1-pesos[atual.first]))
+			prob = 1.0-(1.0-CostFromEdge(grafo, atual.first, i))*(1.0-pesos[atual.first]);
+			//printf("%d %lf %lf %lf %lf\n", node+1, CostFromEdge(grafo, atual.first, i), prob, 1-prob, pesos[node]);
+			if(prob < pesos[node])
 			{
-				pesos[node] = 1.0-(1.0-CostFromEdge(grafo, atual.first, i))*(1-pesos[atual.first]);
+				pesos[node] = prob;
 				PushHeap(&q, make_intDoublePair(node, pesos[node]));
+				antecedentes[node] = atual.first;
 			}
 		}
     }
     
     if(encontrou)
     {
-    	printf("%lf\n", pesos[end]);
+    	PrintPath(antecedentes, start, end);
+    	printf("%.2lf", pesos[end]);
+    	printf(" %d", end+1);
     }
     else
     {
-    	printf("-1\n");
+    	printf("-1");
     }
     //free(pesos);
     //free(antecedentes);
     //antecedentes = NULL;
     //pesos = NULL;
-    
-    /*
-    while(!pq.empty())
-	{
-		atual = *pq.begin();
-		pq.erase(pq.begin());
-		
-		if(atual.second == end) break;
-		
-		for(vector<PII >::iterator it = (*grafo)[atual.second].begin(); it != (*grafo)[atual.second].end(); it++)
-			if(pesos[it->second] > it->first+pesos[atual.second])
-			{
-				pesos[it->second] = it->first+pesos[atual.second];
-				pq.insert(make_pair(pesos[it->second], it->second));
-			}
-	}
-	
-	if(pesos[end] != INF)
-		return pesos[end];
-	else return -1;
-    */
 }
 
 int comp(const intDouble_pair a, const intDouble_pair b)
@@ -178,3 +164,11 @@ int comp(const intDouble_pair a, const intDouble_pair b)
 	if(a.second == b.second) return a.first < b.first;
 	else return a.second < b.second;
 }
+
+void PrintPath(int *parents, int start, int end)
+{
+	if(start == end) return;
+	PrintPath(parents, start, parents[end]);
+	printf(" %d", parents[end]+1);
+}
+
