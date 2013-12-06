@@ -64,7 +64,6 @@ void PushHeap(heap *obj, intDouble_pair value)
 	obj->values[obj->size] = value;
 	obj->size += 1;
 	
-	// TODO: Verificar se eu uso a função func corretamente aqui.
 	while(index > 0 && !obj->func(obj->values[Father(index)], obj->values[index]))
 	{
 		swap = obj->values[Father(index)];
